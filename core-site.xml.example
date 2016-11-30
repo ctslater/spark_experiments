@@ -1,0 +1,34 @@
+<configuration>
+  <property>
+    <name>fs.swift.impl</name>
+    <value>org.apache.hadoop.fs.swift.snative.SwiftNativeFileSystem</value>
+  </property>
+  <property>
+    <name>fs.swift.service.Nebula.auth.url</name>
+    <value>http://nebula.ncsa.illinois.edu:5000/v2.0/tokens</value>
+  </property>
+  <property>
+    <name>fs.swift.service.Nebula.http.port</name>
+    <value>8080</value>
+  </property>
+  <property>
+    <name>fs.swift.service.Nebula.region</name>
+    <value>RegionOne</value>
+  </property>
+  <property>
+    <name>fs.swift.service.Nebula.public</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>fs.swift.service.Nebula.tenant</name>
+    <value>LSST</value>
+  </property>
+  <property>
+    <name>fs.swift.service.Nebula.username</name>
+    <value>USERNAME</value>
+  </property>
+  <property>
+    <name>fs.swift.service.Nebula.password</name>
+    <value>PASSWORD</value>
+  </property>
+</configuration>

@@ -1,0 +1,2 @@
+docker service rm spark-workers spark-master
+docker network rm spark-net

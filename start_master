@@ -1,0 +1,12 @@
+
+CLUSTER_PREFIX="cts-spark"
+NET_ETH="eth0"
+KEYSTORE_IP="172.16.1.224"
+
+
+docker swarm init 
+
+# Might not be necessary, but just in case
+SWARM_TOKEN=$(docker swarm join-token -q master)
+docker swarm join --advertise-addr $KEYSTORE_IP --token $SWARM_TOKEN $KEYSTORE_IP:2377
+

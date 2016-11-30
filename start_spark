@@ -1,0 +1,17 @@
+
+docker network create --driver overlay --subnet 10.0.3.0/24 spark-net
+
+# To use the Swift object store, spark needs a core-site.xml file with 
+# the appropriate authentication details/passwords. Transmitting it this way
+# keeps it out of the public Docker image.
+docker secret create core-site < core-site.xml
+
+MASTER_OPTS="--name spark-master --endpoint-mode dnsrr --replicas 1 --network spark-net --constraint engine.labels.role==master"
+MASTER_OPTS="$MASTER_OPTS --secret core-site"
+docker service create $MASTER_OPTS ctslater/nebula-spark:v1.8 /start-master
+
+WORKER_OPTS="--name spark-workers --endpoint-mode dnsrr --replicas 1 --network spark-net --constraint engine.labels.role==node"
+WORKER_OPTS="$WORKER_OPTS --secret core-site"
+# Here docker is using some DNS magic to lookup the ip of spark-master
+docker service create $WORKER_OPTS ctslater/nebula-spark:v1.8 /start-worker spark-master
+

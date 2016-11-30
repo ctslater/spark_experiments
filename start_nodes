@@ -1,0 +1,34 @@
+CLUSTER_PREFIX="cts-spark"
+NET_ETH=eth0
+KEYSTORE_IP="172.16.1.224"
+
+SWARM_OPTIONS=""
+
+DRIVER_OPTIONS="--driver openstack "
+
+# The constraint role=node is how we ensure this only runs on worker nodes.
+WORKER_OPTIONS="$DRIVER_OPTIONS $SWARM_OPTIONS -engine-label role=node "
+
+# use test.docker.com to get the latest release candidate, needed to work around
+# some bugs
+WORKER_OPTIONS="$WORKER_OPTIONS --engine-install-url https://test.docker.com  "
+WORKER_OPTIONS="$WORKER_OPTIONS --openstack-image-id af68b141-dce4-4aba-91bc-ea5affac0b5f --openstack-ssh-user centos"
+WORKER_OPTIONS="$WORKER_OPTIONS --openstack-keypair-name swarm-key --openstack-private-key-file $HOME/.ssh/id_rsa"
+WORKER_OPTIONS="$WORKER_OPTIONS --openstack-net-name LSST-net --openstack-sec-groups cts-spark"
+
+WORKER=${CLUSTER_PREFIX}-worker1
+
+nova keypair-add --pub-key $HOME/.ssh/id_rsa.pub swarm-key
+
+docker-machine create $WORKER_OPTIONS --openstack-flavor-name=m4.large $WORKER
+
+
+SWARM_TOKEN=$(docker swarm join-token -q worker)
+
+eval $(docker-machine env $WORKER)
+docker swarm join --token $SWARM_TOKEN $KEYSTORE_IP:2377 
+
+# docker-machine config returned the wrong certificate paths, work around by
+# using docker-machine env instead.
+# docker $(docker-machine config $WORKER) swarm join --token $TOKEN $KEYSTORE_IP:2377 
+
