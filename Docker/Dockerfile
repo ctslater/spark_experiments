@@ -1,7 +1,7 @@
 FROM java:openjdk-8-jdk
 
 ENV hadoop_ver 2.7.3
-ENV spark_ver 2.0.1
+ENV spark_ver 2.1.0
 
 # Get Hadoop from US Apache mirror and extract just the native
 # libs. (Until we care about running HDFS with these containers, this
@@ -22,7 +22,8 @@ RUN mkdir -p /opt && \
     echo Spark ${spark_ver} installed in /opt
 
 RUN curl http://central.maven.org/maven2/org/apache/hadoop/hadoop-openstack/${hadoop_ver}/hadoop-openstack-${hadoop_ver}.jar \
-    >/opt/spark/jars/hadoop-openstack-${hadoop_ver}.jar
+    >/opt/spark/jars/hadoop-openstack-${hadoop_ver}.jar && \
+    ln -s /opt/spark/jars/hadoop-openstack-${hadoop_ver}.jar /opt/hadoop/share/hadoop/common/lib/
 
 # workers, so install it everywhere
 RUN apt-get update && \
@@ -33,6 +34,6 @@ RUN apt-get update && \
 # ADD log4j.properties /opt/spark/conf/log4j.properties
 RUN echo "export SPARK_DIST_CLASSPATH=$(/opt/hadoop/bin/hadoop classpath)" > /opt/spark/conf/spark-env.sh
 ADD start-worker start-master /
-ADD core-site.xml /opt/spark/conf/core-site.xml
 ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
+RUN ln -s /run/secrets/core-site /opt/spark/conf/core-site.xml
 ENV PATH $PATH:/opt/spark/bin

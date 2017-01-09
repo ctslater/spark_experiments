@@ -16,7 +16,7 @@ WORKER_OPTIONS="$WORKER_OPTIONS --openstack-image-id af68b141-dce4-4aba-91bc-ea5
 WORKER_OPTIONS="$WORKER_OPTIONS --openstack-keypair-name swarm-key --openstack-private-key-file $HOME/.ssh/id_rsa"
 WORKER_OPTIONS="$WORKER_OPTIONS --openstack-net-name LSST-net --openstack-sec-groups cts-spark"
 
-WORKER=${CLUSTER_PREFIX}-worker1
+WORKER=${CLUSTER_PREFIX}-$1
 
 nova keypair-add --pub-key $HOME/.ssh/id_rsa.pub swarm-key
 
