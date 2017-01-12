@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker network create --driver overlay --subnet 172.30.1.0/24 spark-net
+docker network create --driver overlay --attachable --subnet 172.30.1.0/24 spark-net
 
 # To use the Swift object store, spark needs a core-site.xml file with 
 # the appropriate authentication details/passwords. Transmitting it this way
