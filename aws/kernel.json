@@ -1,0 +1,19 @@
+{
+"display_name": "PySpark",
+"language": "python",
+"argv": [
+  "python",
+  "-m",
+  "ipykernel",
+  "-f",
+  "{connection_file}"
+],
+"env": {
+"HADOOP_HOME": "/usr/lib/hadoop",
+"SPARK_DAEMON_JAVA_OPTS": " -XX:OnOutOfMemoryError='kill -9 %p'",
+"SPARK_HOME": "/usr/lib/spark",
+"PYSPARK_SUBMIT_ARGS": "'--name' 'PySparkShell' 'pyspark-shell'",
+"PYTHONPATH": "/usr/lib/spark/python/lib/py4j-0.10.4-src.zip:/usr/lib/spark/python/:",
+"PYTHONSTARTUP": "/usr/lib/spark/python/pyspark/shell.py"
+}
+}
